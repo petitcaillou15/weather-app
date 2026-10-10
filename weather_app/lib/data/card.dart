@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/weather_code.dart';
 import '../models/forecast.dart';
 
 class WeatherCard extends StatefulWidget {
   final String title;
-  final String subtitle;
+  final double dayTemperature;
+  final int weathrCode;
   final List<HourlyTemperature> todayHours;
   final List<DailyMean> nextDays;
+  final bool farenheit;
 
   const WeatherCard({
     super.key,
     required this.title,
-    required this.subtitle,
+    required this.dayTemperature,
+    required this.weathrCode,
     required this.todayHours,
     required this.nextDays,
+    required this.farenheit
   });
   @override
   State<WeatherCard> createState() => _WeatherCardState();
@@ -20,9 +25,15 @@ class WeatherCard extends StatefulWidget {
 
 class _WeatherCardState extends State<WeatherCard> {
   bool _showWeek = false;
+  bool farenheit = false;
+
+  double toFarenheit(double celcius){
+    return celcius*(9/5) + 32;
+  }
 
   @override
   Widget build(BuildContext context) {
+    farenheit = widget.farenheit;
     return Card(
       child: Padding(
         padding: EdgeInsets.all(16.0),
@@ -32,10 +43,10 @@ class _WeatherCardState extends State<WeatherCard> {
             Text(
               widget.title,
               style: DefaultTextStyle.of(context).style
-                  .apply(fontSizeFactor: 2.0)
+                  .apply(fontSizeFactor: 1.5)
             ),
-            Text(widget.subtitle, style: DefaultTextStyle.of(context).style
-                  .apply(fontSizeFactor: 1.3)),
+            Text(farenheit ? '${toFarenheit(widget.dayTemperature).round()}F · ${describeWeather(widget.weathrCode)}' :
+              '${widget.dayTemperature.round()}° · ${describeWeather(widget.weathrCode)}'),
             Padding(padding: EdgeInsets.symmetric(horizontal: 30.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,7 +55,7 @@ class _WeatherCardState extends State<WeatherCard> {
                     Column(
                       children: [
                         Text('${hours.hour}h'),
-                        Text('${hours.temperature.round()}°'),
+                        Text(farenheit ? '${toFarenheit(hours.temperature).round()}F' :'${hours.temperature.round()}°'),
                       ],
                     ),
                 ],
@@ -71,7 +82,7 @@ class _WeatherCardState extends State<WeatherCard> {
                     Column(
                       children: [
                         Text('${day.date.day}/${day.date.month}'),
-                        Text('${day.temperature.round()}°'),
+                        Text(farenheit ? '${toFarenheit(day.temperature).round()}F' : '${day.temperature.round()}°')
                       ],
                     ),
                 ],
