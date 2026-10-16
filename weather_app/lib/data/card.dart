@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:weather_app/data/labeledValue.dart';
 import 'package:weather_app/weather_code.dart';
 import '../models/forecast.dart';
 
@@ -54,9 +56,10 @@ class _WeatherCardState extends State<WeatherCard> {
                   for (var hours in widget.todayHours)
                     Column(
                       children: [
-                        Text('${hours.hour}h'),
-                        Text(farenheit ? '${toFarenheit(hours.temperature).round()}F' :'${hours.temperature.round()}°'),
-                      ],
+                        Labeledvalue(
+                          label: '${hours.hour}',
+                          value: farenheit ? '${toFarenheit(hours.temperature).round()}F' :'${hours.temperature.round()}°')
+                      ]
                     ),
                 ],
               ),
@@ -81,8 +84,10 @@ class _WeatherCardState extends State<WeatherCard> {
                   for (var day in widget.nextDays)
                     Column(
                       children: [
-                        Text('${day.date.day}/${day.date.month}'),
-                        Text(farenheit ? '${toFarenheit(day.temperature).round()}F' : '${day.temperature.round()}°')
+                        Labeledvalue(
+                          label: DateFormat.E("fr_FR").format(day.date),
+                          value: farenheit ? '${toFarenheit(day.temperature).round()}F' : '${day.temperature.round()}°'
+                        )
                       ],
                     ),
                 ],
