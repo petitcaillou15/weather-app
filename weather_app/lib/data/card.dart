@@ -6,19 +6,13 @@ import '../models/forecast.dart';
 
 class WeatherCard extends StatefulWidget {
   final String title;
-  final double dayTemperature;
-  final int weathrCode;
-  final List<HourlyTemperature> todayHours;
-  final List<DailyMean> nextDays;
+  final Forecast forecast;
   final bool farenheit;
 
   const WeatherCard({
     super.key,
     required this.title,
-    required this.dayTemperature,
-    required this.weathrCode,
-    required this.todayHours,
-    required this.nextDays,
+    required this.forecast,
     required this.farenheit
   });
   @override
@@ -47,13 +41,13 @@ class _WeatherCardState extends State<WeatherCard> {
               style: DefaultTextStyle.of(context).style
                   .apply(fontSizeFactor: 1.5)
             ),
-            Text(farenheit ? '${toFarenheit(widget.dayTemperature).round()}F · ${describeWeather(widget.weathrCode)}' :
-              '${widget.dayTemperature.round()}° · ${describeWeather(widget.weathrCode)}'),
+            Text(farenheit ? '${toFarenheit(widget.forecast.currentTemperature).round()}F · ${describeWeather(widget.forecast.weatherCode)}' :
+              '${widget.forecast.currentTemperature.round()}° · ${describeWeather(widget.forecast.weatherCode)}'),
             Padding(padding: EdgeInsets.symmetric(horizontal: 30.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  for (var hours in widget.todayHours)
+                  for (var hours in widget.forecast.todayHours)
                     Column(
                       children: [
                         Labeledvalue(
@@ -81,7 +75,7 @@ class _WeatherCardState extends State<WeatherCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  for (var day in widget.nextDays)
+                  for (var day in widget.forecast.nextDays)
                     Column(
                       children: [
                         Labeledvalue(

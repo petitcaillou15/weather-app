@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/models/place.dart';
 import '../data/card.dart';
 import '../data/demo_data.dart';
 
@@ -11,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool farenheit = false;
+  List<Place> listplace = listPlace; 
 
   @override
   Widget build(BuildContext context) {
@@ -27,19 +29,18 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             ),
         ),
-      body: Column(
-        children: [
-          for (var demo in demoData)
+      body: SingleChildScrollView(
+        child: Column( 
+          children: [
+          for (var place in listplace)
             WeatherCard(
-              title: demo.place.name,
-              dayTemperature: demo.forecast.currentTemperature,
-              weathrCode: demo.forecast.weatherCode,
-              todayHours: demo.forecast.todayHours,
-              nextDays: demo.forecast.nextDays,
+              title: place.name,
+              forecast: fakeForcast(),
               farenheit: farenheit,
             ),
         ],
       ),
+      )
     );
   }
 }
